@@ -9,6 +9,7 @@ def main():
 
 
     pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #do not move under game loop else flicker happens
     clock = pygame.time.Clock()                 #FPS control
     dt = 0
 
@@ -16,14 +17,18 @@ def main():
 
     #infinite loop for running
     while True:
-        screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #from constants
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return
 
 
-        #all of these will be updated while the game runs      
+        #all of these will be updated while the game runs
+        player.update(dt) #update player movement
+
+              
         screen.fill((0, 0, 0))                  #black fill of screen #background color
+
+        
         player.draw(screen)                     #draw player after screen fill otherwise you can't see him xD
 
         pygame.display.flip()                   #update screen
