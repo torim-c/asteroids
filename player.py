@@ -2,6 +2,7 @@ import pygame
 from circleshape import CircleShape
 from constants import *
 
+
 class Player(CircleShape): #for hitboxes
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
@@ -21,11 +22,22 @@ class Player(CircleShape): #for hitboxes
     def rotate (self, dt): #rotates player
         self.rotation += PLAYER_TURN_SPEED * dt
 
-    def update(self, dt):
+    def update(self, dt): #updates player position (movement) on key press
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]: #turn left
-            self.rotate(dt)
+            self.rotate(-dt)
 
         if keys[pygame.K_d]: #turn right #adding minus infront of -dt inverses the result becuase dt is passed as negative
-            self.rotate(-dt)
+            self.rotate(dt)
+        
+        if keys[pygame.K_w]: #go forwards
+            self.move(dt)
+
+        if keys[pygame.K_s]: #go backwards
+            self.move(-dt * 0.75)
+
+
+    def move(self, dt):
+        forward = pygame.Vector2(0, 1).rotate(self.rotation)
+        self.position += forward * PLAYER_SPEED * dt
