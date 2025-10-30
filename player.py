@@ -1,12 +1,14 @@
 import pygame
 from circleshape import CircleShape
 from constants import *
+from shot import *
 
 
 class Player(CircleShape): #for hitboxes
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation = 0
+        self.shoot_cooldown = 0
 
     def triangle(self): #draw a triangle - used for player model // hitbox is still a circle
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -22,7 +24,11 @@ class Player(CircleShape): #for hitboxes
     def rotate (self, dt): #rotates player
         self.rotation += PLAYER_TURN_SPEED * dt
 
-    def update(self, dt): #updates player position (movement) on key press
+    def update(self, dt): #updates player actions on key press
+        self.shoot_cooldown -= dt
+#        if self.shoot_cooldown < 0: FOR REFACTORING A CLAMP LATER
+#            self.shoot_cooldown = 0
+
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_a]: #turn left
@@ -37,7 +43,17 @@ class Player(CircleShape): #for hitboxes
         if keys[pygame.K_s]: #go backwards
             self.move(-dt * 0.75)
 
+        if keys[pygame.K_SPACE]:
+            self.shoot()
+
 
     def move(self, dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt
+
+    def shoot(self):
+        if self.shoot_cooldown > 0:
+            return
+        bullet = shot(self.position.x, self.position.y)
+        bullet.velocity = pygame.Vector2(0, 1).rotate(self.rotation) * SHOT_SPEED   #very cool circular pattern in a snail like fashio when constant
+        self.shoot_cooldown = PLAYER_SHOOT_COOLDOWN

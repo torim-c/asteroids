@@ -17,3 +17,8 @@ ASTEROID_MAX_RADIUS = ASTEROID_MIN_RADIUS * ASTEROID_KINDS
 PLAYER_RADIUS = 20 # size of player ship
 PLAYER_TURN_SPEED = 300 #turn speed of ship - adjust here and don't mess with dt!
 PLAYER_SPEED = 200 #player forward speed
+PLAYER_SHOOT_COOLDOWN = 0.5
+
+#Shot Config
+SHOT_RADIUS = 5
+SHOT_SPEED = 500
